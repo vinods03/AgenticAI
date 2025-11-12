@@ -1,0 +1,85 @@
+data_architecture_task:
+  description: >
+    Design the complete Pyspark ETL pipeline architecture based on requirements.
+    Requirements: Refer the mapping document {mapping_doc} at C:\Users\VINOD\projects\agents\3_crew\enhanced_automated_etl_pipeline.
+    Every row in the xlsx file represents a column in the target table.
+    The "Transformation Rule" column in every row indicates how the source column is transformed into the target column.
+    The transformed data must have all the columns of the target table, transformed from the source table/source column, as specified by the Transformation Rule column.
+    Source: {source}
+    Destination: {destination} 
+    Create a detailed design document including:
+    1. Data flow diagram
+    2. Extraction strategy with connection details
+    3. Loading strategy with connection details
+    4. Transformation logic with business rules, based on the mapping document {mapping_doc}
+    5. Error handling approach
+    6. Validation rules and data quality checks
+    7. Logging and monitoring strategy
+    8. Performance considerations
+  expected_output: >
+    A comprehensive architecture document in markdown with diagrams.
+  output_file: 
+    output/employee_etl_design.md
+  agent: data_architect
+
+etl_engineer_task:
+  description: >
+    Implement the ETL pipeline design described by the data architect, using Pyspark.
+    Requirements: Refer the mapping document {mapping_doc} at C:\Users\VINOD\projects\agents\3_crew\enhanced_automated_etl_pipeline.
+    Every row in the xlsx file represents a column in the target table.
+    The "Transformation Rule" column in every row indicates how the source column is transformed into the target column.
+    The transformed data must have all the columns of the target table, transformed from the source table/source column, as specified by the Transformation Rule column.
+    Please provide complete transformation code for every target column and NOT example transformations.
+    Source: {source}
+    Destination: {destination}
+    Create a module named {pipeline_name} that implements the design.
+    This should include the following:
+    - Data extraction from {source}
+    - Data loading to {destination}
+    - Transformation logic to transform the data from {source} to {destination}, accoring to the mapping document {mapping_doc}
+    - Error handling
+    - Validation rules to validate the data after transformation
+    - Monitoring approach to monitor the pipeline
+    Output the code in pyspark code format.
+  expected_output: >
+    A pyspark module that implements the design and achieves the requirements.
+    IMPORTANT: Output ONLY the raw Pyspark code without any markdown formatting, code block delimiters, or backticks.
+    The output should be valid Pyspark code that can be directly saved to a file and executed.
+  output_file: 
+    output/employee_etl.py
+  agent: etl_engineer
+
+quality_assurance_engineer_task:
+  description: >
+    Test the implementation of the Pyspark ETL pipeline created by the etl_engineer.
+    Requirements: Refer the mapping document {mapping_doc} at C:\Users\VINOD\projects\agents\3_crew\enhanced_automated_etl_pipeline.
+    Every row in the xlsx file represents a column in the target table.
+    The "Transformation Rule" column in every row indicates how the source column is transformed into the target column.
+    The transformed data must have all the columns of the target table, transformed from the source table/source column, as specified by the Transformation Rule column.
+    Source: {source}
+    Destination: {destination}
+    Create comprehensive data quality checks and unit tests for {pipeline_name}.
+    Include: schema validation, data type checks, null checks, range validation,
+    duplicate detection, referential integrity, and data profiling.
+    Ensure no hard-coded data or dataframes are used inside the script.
+    The testing team must be able to pass actual data / dataframes to the various functions / data quality checks defined in the test script.
+    All the functions must be able to accept dataframe as one of the inputs.
+    For example, functions must be defined as "def test_non_null_critical_fields(actual_data)", where "actual_data" will be passed as a parameter by the testing team.
+  expected_output: >
+    A python file containing the code with unit test cases for the given requirement.
+  output_file: 
+    output/employee_etl_test.py
+  agent: quality_assurance_engineer
+
+documentation_specialist_task:
+  description: >
+    Create comprehensive documentation for {pipeline_name} that the etl_engineer has created, including:
+    - README with setup instructions
+    - Architecture diagram (mermaid) showing the data flow from source to destination
+    - Troubleshooting guide
+    This will be referenced by new etl engineers joining the team, production support engineers and the quality assurance engineers team.
+  expected_output: >
+    A markdown file containing the documentation for the given requirement.
+  output_file: 
+    output/employee_etl_documentation.md
+  agent: documentation_specialist
