@@ -1,0 +1,55 @@
+Created config.py
+
+Created csv_handler.py.
+Functions were added incrementally and tested step by step, using / enhancing test.py as well incrementally.
+
+How to test ?
+Open Cursor Terminal, navigate to C:\Users\VINOD\projects\agents\6_mcp\my_project> 
+python test.py (you might have to "pip install pandas")
+
+Then, created data_quality.py
+Functions were added incrementally and tested step by step, using / enhancing test.py as well incrementally.
+
+Then, created pipeline_monitor.py, with only one function "verify_data_quality".
+For local testing, instead of:
+# @mcp.tool()
+# async def verify_data_quality(source_name: str):
+i used:
+def verify_data_quality(source_name: str):
+
+Instead of:
+if __name__ == "__main__":
+    mcp.run(transport='stdio')
+
+i used:
+if __name__ == "__main__":
+    # mcp.run(transport='stdio')
+    verify_data_quality('test')
+
+Once local testing is completed successfully, return to the mcp version of pipeline_monitor.py.
+Add below at C:\Users\VINOD\AppData\Roaming\Claude\claude_desktop_config.json:
+
+"dqMonitor":
+   {
+	  "command": "C:\\Users\\VINOD\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv", 
+	  "args": [
+	  "--directory",
+          "C:\\Users\\VINOD\\projects\\agents\\.venv\\Lib\\site-packages",
+	  "run",
+	  "C:\\Users\\VINOD\\projects\\agents\\6_mcp\\my_project\\pipeline_monitor.py"
+	  ]
+   }
+
+
+Verify that the Claude desktop opens without any errors and also dqMonitor and the "verify data quality" appears in the "Search and Tools" section of the Claude desktop.
+Then, in the Chat window of Claude desktop, check these:
+What is the data quality
+What is the data quality of test.csv
+What is the data quality of sales_data.csv
+
+I had to modify config.py -> file_path from "test.csv" (relative path) to r"C:\Users\VINOD\projects\agents\6_mcp\my_project\test.csv" (absolute path. Without the "r", there is a unicode error. Probably // instead of / will work too, instead of the r). Based on the input file name, the Claude desktop is able to look for thee appropriate file and perform its DQ check -> because, when i asked What is the data quality of sales_data.csv, the Claude desktop was able to find that the file is not available in the required path.
+
+So, Summarizing what this project does:
+Looks for DQ rules in Config.py for multiple sources
+pipeline_monitor.py looks for the sources in the specified path/paths of Config.py.
+pipeline_monitor.py also uses csv_handler to read the source and data_quality to run the defined DQ checks / return the results.
